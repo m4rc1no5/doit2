@@ -6,8 +6,10 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
+import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -18,6 +20,13 @@ public class TodosResources {
     @Test
     public void crud()
     {
+
+        JsonObjectBuilder todoBuilder = Json.createObjectBuilder();
+        JsonObject todoToCreate = todoBuilder.
+                add("caption", "implement").
+                add("priotity", 42).
+                build();
+
         Response response = this.provider.target().request(MediaType.APPLICATION_JSON).get();
         Assert.assertThat(response.getStatus(), CoreMatchers.is(200));
         JsonArray allTodos = response.readEntity(JsonArray.class);
