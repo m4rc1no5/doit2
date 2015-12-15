@@ -10,6 +10,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -26,6 +27,7 @@ public class TodosResources {
                 add("caption", "implement").
                 add("priotity", 42).
                 build();
+        this.provider.target().request().post(Entity.json(todoToCreate));
 
         Response response = this.provider.target().request(MediaType.APPLICATION_JSON).get();
         Assert.assertThat(response.getStatus(), CoreMatchers.is(200));
