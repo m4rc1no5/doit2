@@ -5,7 +5,6 @@ import com.airhacks.doit2.business.reminders.entity.ToDo;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
