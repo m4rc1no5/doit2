@@ -25,9 +25,10 @@ public class TodosResources {
         JsonObjectBuilder todoBuilder = Json.createObjectBuilder();
         JsonObject todoToCreate = todoBuilder.
                 add("caption", "implement").
-                add("priotity", 42).
+                add("priority", 42).
                 build();
-        this.provider.target().request().post(Entity.json(todoToCreate));
+        Response postResponse = this.provider.target().request().post(Entity.json(todoToCreate));
+        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(204));
 
         Response response = this.provider.target().request(MediaType.APPLICATION_JSON).get();
         Assert.assertThat(response.getStatus(), CoreMatchers.is(200));

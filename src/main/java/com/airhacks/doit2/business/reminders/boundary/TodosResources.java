@@ -37,6 +37,6 @@ public class TodosResources {
     @POST
     public void save(ToDo todo)
     {
-        System.out.println("todo = " + todo);
+        this.manager.save(todo);
     }
 }

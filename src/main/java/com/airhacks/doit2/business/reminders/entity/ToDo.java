@@ -8,10 +8,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@Entity
+@NamedQuery(name = ToDo.findAll, query = "SELECT t FROM ToDo t")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ToDo {
 
+    @Id
+    @GeneratedValue
     private long id;
     static final String PREFIX = "reminders.entity.ToDo.";
     public static final String findAll = PREFIX + "findAll";
