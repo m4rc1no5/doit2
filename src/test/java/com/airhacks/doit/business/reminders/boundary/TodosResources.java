@@ -28,7 +28,9 @@ public class TodosResources {
                 add("priority", 42).
                 build();
         Response postResponse = this.provider.target().request().post(Entity.json(todoToCreate));
-        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(204));
+        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(201));
+        String location = postResponse.getHeaderString("Location");
+        System.out.println(location);
 
         Response response = this.provider.target().request(MediaType.APPLICATION_JSON).get();
         Assert.assertThat(response.getStatus(), CoreMatchers.is(200));

@@ -26,8 +26,8 @@ public class ToDoManager {
         return this.em.createNamedQuery(ToDo.findAll, ToDo.class).getResultList();
     }
 
-    public void save(ToDo todo)
+    public ToDo save(ToDo todo)
     {
-        this.em.merge(todo);
+        return this.em.merge(todo);
     }
 }

@@ -5,6 +5,10 @@ import com.airhacks.doit2.business.reminders.entity.ToDo;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.List;
 
 @Stateless
@@ -35,8 +39,11 @@ public class TodosResources {
     }
 
     @POST
-    public void save(ToDo todo)
+    public Response save(ToDo todo, @Context UriInfo info)
     {
-        this.manager.save(todo);
+        ToDo saved = this.manager.save(todo);
+        long id = saved.getId();
+        URI uri = info.getAbsolutePathBuilder().path("/" + id).build();
+        return Response.created(uri).build();
     }
 }
