@@ -41,7 +41,7 @@ public class TodosResources {
 
         //update
         JsonObjectBuilder updateBuilder = Json.createObjectBuilder();
-        JsonObject updated = todoBuilder.
+        JsonObject updated = updateBuilder.
                 add("caption", "implemented").
                 build();
         this.provider.client().target(location).request(MediaType.APPLICATION_JSON).put(Entity.json(updated));
@@ -49,6 +49,18 @@ public class TodosResources {
         //find it again
         JsonObject updatedTodo = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
         Assert.assertTrue(updatedTodo.getString("caption").contains("implemented"));
+
+        //update status
+        JsonObjectBuilder statusBuilder = Json.createObjectBuilder();
+        JsonObject status = statusBuilder.
+                add("done", true).
+                build();
+        this.provider.client().target(location).path("status").request(MediaType.APPLICATION_JSON).put(Entity.json(status));
+
+        //verify status
+        updatedTodo = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+        System.out.println(updatedTodo);
+        Assert.assertThat(updatedTodo.getBoolean("done"), CoreMatchers.is(true));
 
         //findAll
         Response response = this.provider.target().request(MediaType.APPLICATION_JSON).get();

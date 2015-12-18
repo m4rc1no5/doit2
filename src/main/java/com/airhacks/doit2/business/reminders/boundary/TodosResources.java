@@ -4,6 +4,7 @@ import com.airhacks.doit2.business.reminders.entity.ToDo;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -38,6 +39,14 @@ public class TodosResources {
     {
         todo.setId(id);
         return manager.save(todo);
+    }
+
+    @PUT
+    @Path("{id}/status")
+    public ToDo statusUpdate(@PathParam("id") long id, JsonObject statusUpdate)
+    {
+        boolean done = statusUpdate.getBoolean("done");
+        return manager.updateStatus(id, done);
     }
 
     @GET
