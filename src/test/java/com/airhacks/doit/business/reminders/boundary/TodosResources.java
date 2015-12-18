@@ -32,6 +32,10 @@ public class TodosResources {
         String location = postResponse.getHeaderString("Location");
         System.out.println(location);
 
+        //GET with id
+        JsonObject dedicatedTodo = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+        Assert.assertTrue(dedicatedTodo.getString("caption").contains("implement"));
+
         Response response = this.provider.target().request(MediaType.APPLICATION_JSON).get();
         Assert.assertThat(response.getStatus(), CoreMatchers.is(200));
         JsonArray allTodos = response.readEntity(JsonArray.class);
@@ -41,9 +45,7 @@ public class TodosResources {
         JsonObject todo = allTodos.getJsonObject(0);
         Assert.assertTrue(todo.getString("caption").startsWith("imp"));
 
-        //GET with id
-        JsonObject dedicatedTodo = this.provider.target().path("42").request(MediaType.APPLICATION_JSON).get(JsonObject.class);
-        Assert.assertTrue(dedicatedTodo.getString("caption").contains("42"));
+
 
         Response deleteResponse = this.provider.target().path("42").request(MediaType.APPLICATION_JSON).delete();
         Assert.assertThat(deleteResponse.getStatus(), CoreMatchers.is(204)); //status 204 ma void
