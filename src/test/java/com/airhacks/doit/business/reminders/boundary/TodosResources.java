@@ -62,6 +62,24 @@ public class TodosResources {
         System.out.println(updatedTodo);
         Assert.assertThat(updatedTodo.getBoolean("done"), CoreMatchers.is(true));
 
+        //update not existing status
+        JsonObjectBuilder notExistingBuilder = Json.createObjectBuilder();
+        status = notExistingBuilder.
+                add("done", true).
+                build();
+        Response responseNotExistingStatus = this.provider.target().path("-42").path("status").request(MediaType.APPLICATION_JSON).put(Entity.json(status));
+        Assert.assertThat(responseNotExistingStatus.getStatus(), CoreMatchers.is(400));
+        Assert.assertFalse(responseNotExistingStatus.getHeaderString("reason").isEmpty());
+
+        //update malformed status
+        JsonObjectBuilder malformedBuilder = Json.createObjectBuilder();
+        status = malformedBuilder.
+                add("kabooom", true).
+                build();
+        Response responsemMalformedStatus = this.provider.client().target(location).path("status").request(MediaType.APPLICATION_JSON).put(Entity.json(status));
+        Assert.assertThat(responsemMalformedStatus.getStatus(), CoreMatchers.is(400));
+        Assert.assertFalse(responsemMalformedStatus.getHeaderString("reason").isEmpty());
+
         //findAll
         Response response = this.provider.target().request(MediaType.APPLICATION_JSON).get();
         Assert.assertThat(response.getStatus(), CoreMatchers.is(200));
