@@ -44,7 +44,7 @@ public class ToDo implements ValidEntity {
 
     @Override
     public boolean isValid() {
-        return (this.priority > 10 && this.description != null);
+        return this.priority <= 10 || (this.description != null);
     }
 
     public long getId() {

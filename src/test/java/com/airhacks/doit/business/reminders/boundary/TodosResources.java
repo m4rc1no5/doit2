@@ -129,8 +129,8 @@ public class TodosResources {
         //object
         JsonObjectBuilder todoBuilder = Json.createObjectBuilder();
         JsonObject todoToCreate = todoBuilder.
-                add("caption", "10").
-                add("priority", 9).
+                add("caption", "some caption").
+                add("priority", 10).
                 build();
 
         //create
