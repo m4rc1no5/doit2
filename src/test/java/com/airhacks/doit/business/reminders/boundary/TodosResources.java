@@ -44,7 +44,17 @@ public class TodosResources {
         JsonObject updated = updateBuilder.
                 add("caption", "implemented").
                 build();
-        this.provider.client().target(location).request(MediaType.APPLICATION_JSON).put(Entity.json(updated));
+        Response updateResponse = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).put(Entity.json(updated));
+        Assert.assertThat(updateResponse.getStatus(), CoreMatchers.is(200));
+
+        //update again
+        updateBuilder = Json.createObjectBuilder();
+        updated = updateBuilder.
+                add("caption", "implemented").
+                add("priority", 100).
+                build();
+        updateResponse = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).put(Entity.json(updated));
+        Assert.assertThat(updateResponse.getStatus(), CoreMatchers.is(200));
 
         //find it again
         JsonObject updatedTodo = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
