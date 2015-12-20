@@ -4,6 +4,7 @@ import com.airhacks.doit2.business.reminders.entity.ToDo;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -31,7 +32,7 @@ public class TodosResources {
     }
 
     @POST
-    public Response save(ToDo todo, @Context UriInfo info)
+    public Response save(@Valid ToDo todo, @Context UriInfo info)
     {
         ToDo saved = this.manager.save(todo);
         long id = saved.getId();

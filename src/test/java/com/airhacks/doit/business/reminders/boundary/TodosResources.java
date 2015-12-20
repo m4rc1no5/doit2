@@ -107,4 +107,34 @@ public class TodosResources {
         Response deleteResponse = this.provider.target().path("42").request(MediaType.APPLICATION_JSON).delete();
         Assert.assertThat(deleteResponse.getStatus(), CoreMatchers.is(204)); //status 204 ma void
     }
+
+    @Test
+    public void createToDoWithoutCaption()
+    {
+        //object
+        JsonObjectBuilder todoBuilder = Json.createObjectBuilder();
+        JsonObject todoToCreate = todoBuilder.
+                add("priority", 42).
+                build();
+
+        //create
+        Response postResponse = this.provider.target().request().post(Entity.json(todoToCreate));
+        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(400));
+        postResponse.getHeaders().entrySet().forEach(System.out::println);
+    }
+
+    @Test
+    public void createValidToDo()
+    {
+        //object
+        JsonObjectBuilder todoBuilder = Json.createObjectBuilder();
+        JsonObject todoToCreate = todoBuilder.
+                add("caption", "kaboom").
+                add("priority", 42).
+                build();
+
+        //create
+        Response postResponse = this.provider.target().request().post(Entity.json(todoToCreate));
+        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(201));
+    }
 }
