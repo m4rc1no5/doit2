@@ -54,7 +54,10 @@ public class TodosResources {
                 add("priority", 100).
                 build();
         updateResponse = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).put(Entity.json(updated));
-        Assert.assertThat(updateResponse.getStatus(), CoreMatchers.is(200));
+        Assert.assertThat(updateResponse.getStatus(), CoreMatchers.is(409));
+        String cause = updateResponse.getHeaderString("cause");
+        Assert.assertNotNull(cause);
+        System.out.println(cause);
 
         //find it again
         JsonObject updatedTodo = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
