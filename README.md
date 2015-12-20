@@ -1,3 +1,3 @@
 # doit2
 
-Simple project in Maven. Why Maven? Because setup is incredibly simple.
+Simple JavaEE project in Maven and WildFly. Build with IntelliJ IDEA IDE.
