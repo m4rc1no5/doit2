@@ -1,5 +1,8 @@
 package com.airhacks.doit2.business.reminders.entity;
 
+import com.airhacks.doit2.business.CrossCheck;
+import com.airhacks.doit2.business.ValidEntity;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -11,7 +14,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQuery(name = ToDo.findAll, query = "SELECT t FROM ToDo t")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ToDo {
+@CrossCheck
+public class ToDo implements ValidEntity {
 
     @Id
     @GeneratedValue
@@ -38,6 +42,11 @@ public class ToDo {
     public ToDo() {
     }
 
+    @Override
+    public boolean isValid() {
+        return (this.priority > 10 && this.description != null);
+    }
+
     public long getId() {
         return id;
     }
@@ -50,12 +59,24 @@ public class ToDo {
         return caption;
     }
 
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getPriority() {
         return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public boolean isDone() {
