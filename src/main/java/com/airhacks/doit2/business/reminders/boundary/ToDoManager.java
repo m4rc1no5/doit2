@@ -1,14 +1,17 @@
 package com.airhacks.doit2.business.reminders.boundary;
 
+import com.airhacks.doit2.business.logging.boundary.BoundaryLogger;
 import com.airhacks.doit2.business.reminders.entity.ToDo;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Stateless
+@Interceptors(BoundaryLogger.class)
 public class ToDoManager {
 
     @PersistenceContext
