@@ -14,6 +14,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.hamcrest.CoreMatchers.*;
+
 public class TodosResources {
     @Rule
     public JAXRSClientProvider provider = JAXRSClientProvider.buildWithURI("http://localhost:8080/doit2/api/todos");
@@ -21,7 +23,6 @@ public class TodosResources {
     @Test
     public void crud()
     {
-
         //object
         JsonObjectBuilder todoBuilder = Json.createObjectBuilder();
         JsonObject todoToCreate = todoBuilder.
@@ -31,7 +32,7 @@ public class TodosResources {
 
         //create
         Response postResponse = this.provider.target().request().post(Entity.json(todoToCreate));
-        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(201));
+        Assert.assertThat(postResponse.getStatus(), is(201));
         String location = postResponse.getHeaderString("Location");
         System.out.println(location);
 
@@ -45,7 +46,7 @@ public class TodosResources {
                 add("caption", "implemented").
                 build();
         Response updateResponse = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).put(Entity.json(updated));
-        Assert.assertThat(updateResponse.getStatus(), CoreMatchers.is(200));
+        Assert.assertThat(updateResponse.getStatus(), is(200));
 
         //update again
         updateBuilder = Json.createObjectBuilder();
@@ -54,7 +55,7 @@ public class TodosResources {
                 add("priority", 100).
                 build();
         updateResponse = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).put(Entity.json(updated));
-        Assert.assertThat(updateResponse.getStatus(), CoreMatchers.is(409));
+        Assert.assertThat(updateResponse.getStatus(), is(409));
         String cause = updateResponse.getHeaderString("cause");
         Assert.assertNotNull(cause);
         System.out.println(cause);
@@ -73,7 +74,7 @@ public class TodosResources {
         //verify status
         updatedTodo = this.provider.client().target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
         System.out.println(updatedTodo);
-        Assert.assertThat(updatedTodo.getBoolean("done"), CoreMatchers.is(true));
+        Assert.assertThat(updatedTodo.getBoolean("done"), is(true));
 
         //update not existing status
         JsonObjectBuilder notExistingBuilder = Json.createObjectBuilder();
@@ -81,7 +82,7 @@ public class TodosResources {
                 add("done", true).
                 build();
         Response responseNotExistingStatus = this.provider.target().path("-42").path("status").request(MediaType.APPLICATION_JSON).put(Entity.json(status));
-        Assert.assertThat(responseNotExistingStatus.getStatus(), CoreMatchers.is(400));
+        Assert.assertThat(responseNotExistingStatus.getStatus(), is(400));
         Assert.assertFalse(responseNotExistingStatus.getHeaderString("reason").isEmpty());
 
         //update malformed status
@@ -90,12 +91,12 @@ public class TodosResources {
                 add("kabooom", true).
                 build();
         Response responsemMalformedStatus = this.provider.client().target(location).path("status").request(MediaType.APPLICATION_JSON).put(Entity.json(status));
-        Assert.assertThat(responsemMalformedStatus.getStatus(), CoreMatchers.is(400));
+        Assert.assertThat(responsemMalformedStatus.getStatus(), is(400));
         Assert.assertFalse(responsemMalformedStatus.getHeaderString("reason").isEmpty());
 
         //findAll
         Response response = this.provider.target().request(MediaType.APPLICATION_JSON).get();
-        Assert.assertThat(response.getStatus(), CoreMatchers.is(200));
+        Assert.assertThat(response.getStatus(), is(200));
         JsonArray allTodos = response.readEntity(JsonArray.class);
         System.out.println("allTodos " + allTodos);
         Assert.assertFalse(allTodos.isEmpty());
@@ -105,7 +106,7 @@ public class TodosResources {
 
         //delete not-existing
         Response deleteResponse = this.provider.target().path("42").request(MediaType.APPLICATION_JSON).delete();
-        Assert.assertThat(deleteResponse.getStatus(), CoreMatchers.is(204)); //status 204 ma void
+        Assert.assertThat(deleteResponse.getStatus(), is(204)); //status 204 ma void
     }
 
     @Test
@@ -119,7 +120,7 @@ public class TodosResources {
 
         //create
         Response postResponse = this.provider.target().request().post(Entity.json(todoToCreate));
-        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(400));
+        Assert.assertThat(postResponse.getStatus(), is(400));
         postResponse.getHeaders().entrySet().forEach(System.out::println);
     }
 
@@ -135,7 +136,7 @@ public class TodosResources {
 
         //create
         Response postResponse = this.provider.target().request().post(Entity.json(todoToCreate));
-        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(201));
+        Assert.assertThat(postResponse.getStatus(), is(201));
     }
 
     @Test
@@ -150,7 +151,7 @@ public class TodosResources {
 
         //create
         Response postResponse = this.provider.target().request().post(Entity.json(todoToCreate));
-        Assert.assertThat(postResponse.getStatus(), CoreMatchers.is(400));
+        Assert.assertThat(postResponse.getStatus(), is(400));
         postResponse.getHeaders().entrySet().forEach(System.out::println);
     }
 }
