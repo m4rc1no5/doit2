@@ -9,8 +9,11 @@ import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.xml.rpc.Call;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
@@ -35,4 +38,7 @@ public class MonitorSink {
         return this.recentEvents;
     }
 
+    public LongSummaryStatistics getStatistics() {
+        return this.recentEvents.stream().collect(Collectors.summarizingLong(CallEvent::getDuration));
+    }
 }
